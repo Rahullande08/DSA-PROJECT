@@ -32,14 +32,12 @@ export const CallStackInspector: React.FC<CallStackInspectorProps> = ({
   const [selectedFrameId, setSelectedFrameId] = useState<string | null>(null);
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const topFrameRef = useRef<HTMLDivElement>(null);
-
-  // Auto-scroll to top frame when stack changes
+  // Auto-scroll to top frame strictly within internal container
   useEffect(() => {
-    if (topFrameRef.current && scrollContainerRef.current) {
-      topFrameRef.current.scrollIntoView({
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({
+        top: 0,
         behavior: "smooth",
-        block: "nearest",
       });
     }
   }, [currentStep.stepIndex, frames.length]);
@@ -73,6 +71,7 @@ export const CallStackInspector: React.FC<CallStackInspectorProps> = ({
         {/* Stack Frames List */}
         <div
           ref={scrollContainerRef}
+          style={{ overflowAnchor: "none", contain: "paint layout" }}
           className="p-3 flex-1 overflow-y-auto space-y-2.5 bg-canvas/40 min-h-[220px]"
         >
           {displayFrames.length === 0 ? (
@@ -96,7 +95,6 @@ export const CallStackInspector: React.FC<CallStackInspectorProps> = ({
               return (
                 <div
                   key={frame.id}
-                  ref={isTop ? topFrameRef : undefined}
                   onClick={() =>
                     setSelectedFrameId(isSelected ? null : frame.id)
                   }

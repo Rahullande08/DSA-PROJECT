@@ -120,7 +120,13 @@ export const TreeVisualizer: React.FC<TreeVisualizerProps> = ({
       </div>
 
       {/* Main Canvas Area */}
-      <div className="p-6 bg-[#08090B] min-h-[260px] max-h-[420px] overflow-auto flex items-center justify-center relative bg-grid-pattern">
+      <div
+        className="p-6 bg-[#08090B] min-h-[260px] max-h-[440px] overflow-auto flex items-center justify-center relative bg-grid-pattern"
+        style={{
+          overflowAnchor: "none",
+          contain: "paint layout",
+        }}
+      >
         {viewMode === "ascii" ? (
           <div className="w-full h-full p-4 font-mono text-xs text-text-primary bg-[#0D1015] rounded border border-border overflow-x-auto whitespace-pre leading-relaxed">
             {currentStep.asciiSnapshot || "Initializing ASCII sweep tracer..."}

@@ -71,30 +71,28 @@ export const FibonacciCallTree: React.FC<FibonacciCallTreeProps> = ({
     }
   }, [currentStep.activeTreeNodeId]);
 
-  // Smooth auto-scroll tracking active node
+  // Smooth auto-scroll tracking active node strictly inside container without window reflow
   useEffect(() => {
     if (activeNodeRef.current && containerRef.current) {
       const container = containerRef.current;
       const el = activeNodeRef.current;
-      
-      const containerRect = container.getBoundingClientRect();
-      const elRect = el.getBoundingClientRect();
 
-      const isOutOfView =
-        elRect.left < containerRect.left + 40 ||
-        elRect.right > containerRect.right - 40 ||
-        elRect.top < containerRect.top + 40 ||
-        elRect.bottom > containerRect.bottom - 40;
+      const elLeft = el.offsetLeft;
+      const elTop = el.offsetTop;
+      const elWidth = el.offsetWidth;
+      const elHeight = el.offsetHeight;
 
-      if (isOutOfView) {
-        el.scrollIntoView({
-          behavior: "smooth",
-          block: "nearest",
-          inline: "center",
-        });
-      }
+      // Scale-adjusted centering inside container only
+      const targetScrollLeft = elLeft * zoom - (container.clientWidth - elWidth * zoom) / 2;
+      const targetScrollTop = elTop * zoom - (container.clientHeight - elHeight * zoom) / 2;
+
+      container.scrollTo({
+        left: Math.max(0, targetScrollLeft),
+        top: Math.max(0, targetScrollTop),
+        behavior: "smooth",
+      });
     }
-  }, [currentStep.activeTreeNodeId]);
+  }, [currentStep.activeTreeNodeId, zoom]);
 
   const treeNodes = currentStep.treeNodes;
   const rootId = currentStep.treeRootId;
@@ -283,7 +281,11 @@ export const FibonacciCallTree: React.FC<FibonacciCallTreeProps> = ({
       <div
         ref={containerRef}
         className="relative bg-[#08090B] overflow-auto flex-1 min-h-[340px] max-h-[560px] bg-grid-pattern select-none p-4"
-        style={{ cursor: "grab" }}
+        style={{
+          cursor: "grab",
+          overflowAnchor: "none",
+          contain: "paint layout",
+        }}
       >
         {/* Floating Legend */}
         <div className="sticky top-2 left-2 z-30 inline-flex flex-wrap items-center gap-3 px-2.5 py-1.5 rounded-md bg-[#11151B]/90 backdrop-blur border border-border text-[10px] font-mono text-text-muted shadow-md">

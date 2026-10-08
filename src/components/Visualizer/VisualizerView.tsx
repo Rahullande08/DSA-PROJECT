@@ -84,25 +84,10 @@ export const VisualizerView: React.FC<VisualizerViewProps> = ({
     }
   }, [currentStepIndex, steps, algoDef.name, params.n, onUpdateContext]);
 
-  // Auto-scroll workbench into view when playback begins or on explicit trigger
-  const scrollToWorkbench = (smooth = true) => {
-    if (workbenchRef.current) {
-      const rect = workbenchRef.current.getBoundingClientRect();
-      const isComfortablyVisible = rect.top >= 60 && rect.bottom <= window.innerHeight + 150;
-      if (!isComfortablyVisible) {
-        workbenchRef.current.scrollIntoView({
-          behavior: smooth ? "smooth" : "auto",
-          block: "start",
-        });
-      }
-    }
-  };
 
-  // Auto-play interval timer with smooth view tracking
+  // Auto-play interval timer without erratic window scrolling
   useEffect(() => {
     if (!isPlaying) return;
-
-    scrollToWorkbench(true);
 
     const intervalTime = Math.max(1200 / speed, 250);
     const timer = setInterval(() => {
@@ -133,13 +118,12 @@ export const VisualizerView: React.FC<VisualizerViewProps> = ({
   };
 
   const handleNodeClick = (nodeId: string) => {
-    // Jump to the first step where this node is active or resolved
+    // Jump to the first step where this node is active or resolved without scrolling window
     const targetIdx = steps.findIndex(
       (s) => s.activeTreeNodeId === nodeId || s.treeNodes[nodeId]?.status === "running"
     );
     if (targetIdx !== -1) {
       setCurrentStepIndex(targetIdx);
-      scrollToWorkbench(true);
     }
   };
 
@@ -230,13 +214,13 @@ export const VisualizerView: React.FC<VisualizerViewProps> = ({
             </button>
           </div>
 
-          {/* SWEEP TRACE button (with Auto-Scroll) */}
+          {/* SWEEP TRACE button */}
           <button
+            type="button"
             onClick={() => {
               triggerSweep();
               setCurrentStepIndex(0);
               setIsPlaying(true);
-              scrollToWorkbench(true);
             }}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-accent-blue hover:bg-accent-blue/90 text-canvas font-mono text-xs font-bold shadow-glow-blue transition-all"
           >
@@ -280,11 +264,10 @@ export const VisualizerView: React.FC<VisualizerViewProps> = ({
           </button>
 
           <button
+            type="button"
             onClick={() => {
               setActiveSubTab("tree");
               triggerSweep();
-              const el = document.getElementById("recursion-tree-visualizer");
-              if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
             }}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-mono font-medium transition-all ${
               activeSubTab === "tree"
@@ -357,7 +340,6 @@ export const VisualizerView: React.FC<VisualizerViewProps> = ({
         speed={speed}
         onStepChange={(idx) => {
           setCurrentStepIndex(idx);
-          scrollToWorkbench(true);
         }}
         onPlayToggle={() => setIsPlaying(!isPlaying)}
         onSpeedChange={(s) => setSpeed(s)}

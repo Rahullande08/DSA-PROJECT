@@ -453,7 +453,7 @@ export const PracticeView: React.FC = () => {
 
                 return (
                   <div
-                    key={fIdx}
+                    key={`${currentChallenge.id}-frame-${frame.label}-${fIdx}`}
                     className={`p-2.5 rounded border transition-all ${
                       isBase
                         ? "border-accent-mint bg-[#11151B] shadow-glow-mint"

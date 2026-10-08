@@ -1,0 +1,110 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --canvas: #08090b;
+  --panel: #0d1015;
+  --container: #11151b;
+  --container-high: #191f28;
+  --border: #252b34;
+  --border-focus: #6b8cff;
+  --accent-blue: #6b8cff;
+  --accent-purple: #8b5cf6;
+  --accent-mint: #77e2b8;
+  --accent-amber: #e9bc72;
+  --accent-coral: #f87171;
+  --text-primary: #f4f6fa;
+  --text-secondary: #a1a9b6;
+  --text-muted: #707987;
+  --font-geist: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--canvas);
+  color: var(--text-primary);
+  font-family: var(--font-geist);
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+code, pre, kbd, samp, .font-mono {
+  font-family: var(--font-mono);
+  font-feature-settings: 'tnum' on, 'zero' on;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #08090b;
+}
+::-webkit-scrollbar-thumb {
+  background: #252b34;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #444c5b;
+}
+
+/* ASCII Grid Subtle Background Pattern */
+.bg-grid-pattern {
+  background-size: 32px 32px;
+  background-image: 
+    linear-gradient(to right, rgba(37, 43, 52, 0.25) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(37, 43, 52, 0.25) 1px, transparent 1px);
+}
+
+.bg-radial-halo {
+  background: radial-gradient(circle at 50% 0%, rgba(107, 140, 255, 0.12) 0%, rgba(139, 92, 246, 0.05) 35%, transparent 70%);
+}
+
+.bg-sweep-halo {
+  background: radial-gradient(circle at center, rgba(139, 92, 246, 0.15) 0%, rgba(224, 231, 255, 0.05) 50%, transparent 80%);
+}
+
+/* Monospace Glows */
+.text-glow-blue {
+  text-shadow: 0 0 12px rgba(107, 140, 255, 0.6);
+}
+.text-glow-mint {
+  text-shadow: 0 0 12px rgba(119, 226, 184, 0.6);
+}
+.text-glow-amber {
+  text-shadow: 0 0 12px rgba(233, 188, 114, 0.6);
+}
+.text-glow-coral {
+  text-shadow: 0 0 12px rgba(248, 113, 113, 0.6);
+}
+
+/* Hairline borders */
+.border-hairline {
+  border: 1px solid var(--border);
+}
+
+/* Scanline Effect */
+.scanlines {
+  position: relative;
+}
+.scanlines::after {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+  background-size: 100% 4px;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.3;
+}
